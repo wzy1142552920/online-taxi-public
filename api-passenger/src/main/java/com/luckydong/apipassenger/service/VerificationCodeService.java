@@ -1,10 +1,12 @@
 package com.luckydong.apipassenger.service;
 
 import com.luckydog.internalcommon.constant.CommonStatusEnum;
+import com.luckydog.internalcommon.constant.IdentityConstant;
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.request.VerificationCodeDTO;
 import com.luckydog.internalcommon.response.NumberCodeResponse;
 import com.luckydog.internalcommon.response.TokenResponse;
+import com.luckydog.internalcommon.utils.JwtUtils;
 import com.luckydong.apipassenger.remote.ServicePassengerUserClient;
 import com.luckydong.apipassenger.remote.ServiceVerificationcodeClient;
 import net.sf.json.JSONObject;
@@ -81,9 +83,9 @@ public class VerificationCodeService {
         VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
         verificationCodeDTO.setPassengerPhone(passengerPhone);
         servicePassengerUserClient.loginOrRegister(verificationCodeDTO);
-        // 颁发令牌
+        String token = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken("token value");
+        tokenResponse.setToken(token);
         return ResponseResult.success(tokenResponse);
     }
 }
