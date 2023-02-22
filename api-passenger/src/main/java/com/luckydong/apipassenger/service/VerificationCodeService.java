@@ -2,6 +2,7 @@ package com.luckydong.apipassenger.service;
 
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.response.NumberCodeResponse;
+import com.luckydog.internalcommon.response.TokenResponse;
 import com.luckydong.apipassenger.remote.ServiceVerificationcodeClient;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,19 @@ public class VerificationCodeService {
         result.put("code",1);
         result.put("message","success");
         return result.toString();
+    }
+
+    public ResponseResult checkCode(String passengerPhone, String verificationCode) {
+        System.out.println("进入 checkCode 方法");
+        // 去redis 读取验证码
+
+        // 校验验证码
+
+        // 判断原来是否有用户
+
+        // 颁发令牌
+        TokenResponse tokenResponse = new TokenResponse();
+        tokenResponse.setToken("");
+        return ResponseResult.success(tokenResponse);
     }
 }
