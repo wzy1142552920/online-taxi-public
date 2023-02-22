@@ -3,6 +3,7 @@ package com.luckydog.servicepassengeruser;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author ：LuckyDog
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
+@EnableDiscoveryClient
 @MapperScan("com.luckydog.servicepassengeruser.mapper")
 public class ServicePassengerUserApplication {
 
