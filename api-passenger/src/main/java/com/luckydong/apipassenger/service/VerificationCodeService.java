@@ -1,10 +1,12 @@
 package com.luckydong.apipassenger.service;
 
+import com.luckydog.internalcommon.constant.CommonStatusEnum;
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.response.NumberCodeResponse;
 import com.luckydog.internalcommon.response.TokenResponse;
 import com.luckydong.apipassenger.remote.ServiceVerificationcodeClient;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,12 @@ public class VerificationCodeService {
         String codeRedis = stringRedisTemplate.opsForValue().get(key);
         System.out.println("redis中的value：" + codeRedis);
         // 校验验证码
-        System.out.println("检验验证码");
+        if(StringUtils.isBlank(codeRedis)) {
+            return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERROR.getCode(), CommonStatusEnum.VERIFICATION_CODE_ERROR.getValue());
+        }
+        if (!verificationCode.trim().endsWith(codeRedis.trim())) {
+            return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERROR.getCode(), CommonStatusEnum.VERIFICATION_CODE_ERROR.getValue());
+        }
         // 判断原来是否有用户
 
         // 颁发令牌
