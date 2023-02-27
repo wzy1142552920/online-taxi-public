@@ -7,6 +7,7 @@ import com.luckydog.internalcommon.request.VerificationCodeDTO;
 import com.luckydog.internalcommon.response.NumberCodeResponse;
 import com.luckydog.internalcommon.response.TokenResponse;
 import com.luckydog.internalcommon.utils.JwtUtils;
+import com.luckydog.internalcommon.utils.RedisPrefixUtils;
 import com.luckydong.apipassenger.remote.ServicePassengerUserClient;
 import com.luckydong.apipassenger.remote.ServiceVerificationcodeClient;
 import net.sf.json.JSONObject;
@@ -34,47 +35,25 @@ public class VerificationCodeService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    // 乘客验证码的前缀
-    private String verificationCodePrefix = "passenger-verification-code-";
 
-    private String tokenPrefix = "token-";
-
-    public String generatorCode(String passengerPhone){
+    public ResponseResult generatorCode(String passengerPhone){
         // 调用验证码服务，获取验证码
-        System.out.println("调用验证码服务，获取验证码");
-        String code = "111111";
-
-        ResponseResult<NumberCodeResponse> numberCodeResponse = serviceVerificationCodeClient.getNumberCode(5);
+        ResponseResult<NumberCodeResponse> numberCodeResponse = serviceVerificationCodeClient.getNumberCode(6);
         int numberCode = numberCodeResponse.getData().getNumberCode();
-
-        System.out.println("remote number code:"+numberCode);
-
         // 存入redis
-        System.out.println("存入redis");
-        String key = generatorKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
         stringRedisTemplate.opsForValue().set(key, numberCode+"", 2, TimeUnit.MINUTES);
-
-        // 返回值
-        JSONObject result = new JSONObject();
-        result.put("code",1);
-        result.put("message","success");
-        return result.toString();
+        return ResponseResult.success("");
     }
 
-    private String generatorKeyByPhone(String passengerPhone) {
-        return verificationCodePrefix + passengerPhone;
-    }
 
-    private String generatorTokenKey(String phone, String identity) {
-        return tokenPrefix + phone + "-" + identity;
-    }
 
     public ResponseResult checkCode(String passengerPhone, String verificationCode) {
         System.out.println("进入 checkCode 方法");
         // 去redis 读取验证码
         System.out.println("根据手机号，去Redis读取验证码");
         //生成key
-        String key = generatorKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
         //根据key获取value
         String codeRedis = stringRedisTemplate.opsForValue().get(key);
         System.out.println("redis中的value：" + codeRedis);
@@ -91,7 +70,7 @@ public class VerificationCodeService {
         servicePassengerUserClient.loginOrRegister(verificationCodeDTO);
         String token = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         //将token存到Redis中
-        String tokenKey = generatorTokenKey(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
+        String tokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         stringRedisTemplate.opsForValue().set(tokenKey, token, 30, TimeUnit.DAYS);
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setToken(token);
