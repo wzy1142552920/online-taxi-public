@@ -2,6 +2,7 @@ package com.luckydong.apipassenger.service;
 
 import com.luckydog.internalcommon.constant.CommonStatusEnum;
 import com.luckydog.internalcommon.constant.IdentityConstant;
+import com.luckydog.internalcommon.constant.TokenConstant;
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.request.VerificationCodeDTO;
 import com.luckydog.internalcommon.response.NumberCodeResponse;
@@ -68,12 +69,16 @@ public class VerificationCodeService {
         VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
         verificationCodeDTO.setPassengerPhone(passengerPhone);
         servicePassengerUserClient.loginOrRegister(verificationCodeDTO);
-        String token = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         //将token存到Redis中
-        String tokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
-        stringRedisTemplate.opsForValue().set(tokenKey, token, 30, TimeUnit.DAYS);
+        String accessToken = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY, TokenConstant.ACCESS_TOKEN_TYPE);
+        String accessTokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.PASSENGER_IDENTITY, TokenConstant.ACCESS_TOKEN_TYPE);
+        String refreshToken = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY, TokenConstant.REFRESH_TOKEN_TYPE);
+        String refreshTokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.PASSENGER_IDENTITY, TokenConstant.REFRESH_TOKEN_TYPE);
+        stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30, TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken(token);
+        tokenResponse.setAccessToken(accessToken);
+        tokenResponse.setRefreshToken(refreshToken);
         return ResponseResult.success(tokenResponse);
     }
 }

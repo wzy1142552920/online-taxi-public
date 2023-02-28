@@ -3,6 +3,7 @@ package com.luckydong.apipassenger.intercepter;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.luckydog.internalcommon.constant.TokenConstant;
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.dto.TokenResult;
 import com.luckydog.internalcommon.utils.JwtUtils;
@@ -56,7 +57,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         } else {
             String phone = tokenResult.getPhone();
             String identity = tokenResult.getIdentity();
-            String tokenKey = RedisPrefixUtils.generatorTokenKey(phone, identity);
+            String tokenKey = RedisPrefixUtils.generatorTokenKey(phone, identity, TokenConstant.ACCESS_TOKEN_TYPE);
             String tokenRedis =  stringRedisTemplate.opsForValue().get(tokenKey);
             if (StringUtils.isBlank(tokenRedis)) {
                 resultString = "token invalid";
