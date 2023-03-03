@@ -68,4 +68,14 @@ public class JwtUtils {
         System.out.println("生成的token："+s);
         System.out.println(parseToken(s));
     }
+
+    public static TokenResult checkToken(String token) {
+        TokenResult tokenResult = null;
+        try {
+            tokenResult = JwtUtils.parseToken(token);
+        } catch (Exception e) {
+
+        }
+        return tokenResult;
+    }
 }
