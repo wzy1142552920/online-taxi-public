@@ -1,9 +1,11 @@
 package com.luckydong.apipassenger.controller;
 
 import com.luckydog.internalcommon.dto.ResponseResult;
+import com.luckydong.apipassenger.request.VerificationCodeDTO;
 import com.luckydong.apipassenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,5 +28,11 @@ public class UserController {
         String accessToken = request.getHeader("Authorization");
 
         return userService.getUserByAccessToken(accessToken);
+    }
+
+    @GetMapping("/user/")
+    public ResponseResult getUser(@RequestBody VerificationCodeDTO verificationCodeDTO) {
+        String passengerPhone = verificationCodeDTO.getPassengerPhone();
+        return userService.getUserByPhone(passengerPhone);
     }
 }
