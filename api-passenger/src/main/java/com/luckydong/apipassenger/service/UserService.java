@@ -6,6 +6,7 @@ import com.luckydog.internalcommon.dto.TokenResult;
 import com.luckydog.internalcommon.utils.JwtUtils;
 import com.luckydog.servicepassengeruser.dao.PassengerUser;
 import com.luckydog.servicepassengeruser.mapper.PassengerUserMapper;
+import com.luckydong.apipassenger.remote.ServicePassengerUserClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class UserService {
     @Autowired
     private PassengerUserMapper passengerUserMapper;
 
+    @Autowired
+    private ServicePassengerUserClient servicePassengerUserClient;
+
     public ResponseResult getUserByAccessToken(String accessToken) {
         log.info("accessToken: " + accessToken);
 
@@ -36,11 +40,9 @@ public class UserService {
         log.info("手机号：" + phone);
 
         //根据手机号查询用户信息
+        ResponseResult<PassengerUser> userByPhone = servicePassengerUserClient.getUserByPhone(phone);
 
-        PassengerUser passengerUser = new PassengerUser();
-        passengerUser.setPassengerName("zhangsan");
-        passengerUser.setProfilePhoto("photo");
-        return ResponseResult.success(passengerUser);
+        return ResponseResult.success(userByPhone.getData());
     }
 
     /**

@@ -5,6 +5,7 @@ import com.luckydong.apipassenger.request.VerificationCodeDTO;
 import com.luckydong.apipassenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,9 +31,9 @@ public class UserController {
         return userService.getUserByAccessToken(accessToken);
     }
 
-    @GetMapping("/user/")
-    public ResponseResult getUser(@RequestBody VerificationCodeDTO verificationCodeDTO) {
-        String passengerPhone = verificationCodeDTO.getPassengerPhone();
+    @GetMapping("/user/{phone}")
+    public ResponseResult getUser(@PathVariable("phone") String passengerPhone) {
+        System.out.println("service-passenger-user: phone:" + passengerPhone);
         return userService.getUserByPhone(passengerPhone);
     }
 }
