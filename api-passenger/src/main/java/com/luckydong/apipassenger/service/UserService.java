@@ -25,8 +25,8 @@ import java.util.Map;
 @Slf4j
 public class UserService {
 
-    @Autowired
-    private PassengerUserMapper passengerUserMapper;
+//    @Autowired
+//    private PassengerUserMapper passengerUserMapper;
 
     @Autowired
     private ServicePassengerUserClient servicePassengerUserClient;
@@ -51,16 +51,16 @@ public class UserService {
      * @return
      */
 
-    public ResponseResult getUserByPhone(String passengerPhone) {
-        //根据手机号查询用户信息
-        Map<String, Object> map = new HashMap<>();
-        map.put("passenger_phone", passengerPhone);
-        List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);
-        if (passengerUsers.size() == 0) {
-            return ResponseResult.fail(CommonStatusEnum.USER_NOT_EXISTS.getCode(),  CommonStatusEnum.USER_NOT_EXISTS.getValue());
-        } else {
-            PassengerUser passengerUser = passengerUsers.get(0);
-            return ResponseResult.success(passengerUser);
-        }
-    }
+//    public ResponseResult getUserByPhone(String passengerPhone) {
+//        //根据手机号查询用户信息
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("passenger_phone", passengerPhone);
+//        List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);
+//        if (passengerUsers.size() == 0) {
+//            return ResponseResult.fail(CommonStatusEnum.USER_NOT_EXISTS.getCode(),  CommonStatusEnum.USER_NOT_EXISTS.getValue());
+//        } else {
+//            PassengerUser passengerUser = passengerUsers.get(0);
+//            return ResponseResult.success(passengerUser);
+//        }
+//    }
 }

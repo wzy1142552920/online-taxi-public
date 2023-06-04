@@ -30,10 +30,4 @@ public class UserController {
 
         return userService.getUserByAccessToken(accessToken);
     }
-
-    @GetMapping("/user/{phone}")
-    public ResponseResult getUser(@PathVariable("phone") String passengerPhone) {
-        System.out.println("service-passenger-user: phone:" + passengerPhone);
-        return userService.getUserByPhone(passengerPhone);
-    }
 }
