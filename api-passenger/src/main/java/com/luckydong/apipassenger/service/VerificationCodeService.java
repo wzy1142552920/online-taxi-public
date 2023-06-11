@@ -10,7 +10,7 @@ import com.luckydog.internalcommon.response.TokenResponse;
 import com.luckydog.internalcommon.utils.JwtUtils;
 import com.luckydog.internalcommon.utils.RedisPrefixUtils;
 import com.luckydong.apipassenger.remote.ServicePassengerUserClient;
-import com.luckydong.apipassenger.remote.ServiceVerificationcodeClient;
+import com.luckydong.apipassenger.remote.ServiceVefificationcodeClient;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class VerificationCodeService {
     @Autowired
-    private ServiceVerificationcodeClient.ServiceVefificationcodeClient serviceVerificationCodeClient;
+    private ServiceVefificationcodeClient serviceVerificationCodeClient;
 
     @Autowired
     private ServicePassengerUserClient servicePassengerUserClient;
