@@ -6,6 +6,8 @@ import com.luckydog.serviceDriverUser.mapper.DriverUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 /**
  * @author ：LuckyDog
  * @description：TODO
@@ -24,4 +26,11 @@ public class DriverUserService {
     }
 
 
+    public ResponseResult addDriverUser(DriverUser driverUser) {
+        LocalDateTime now = LocalDateTime.now();
+        driverUser.setGmtCreate(now);
+        driverUser.setGmtModified(now);
+        driverUserMapper.insert(driverUser);
+        return ResponseResult.success("OK");
+    }
 }
