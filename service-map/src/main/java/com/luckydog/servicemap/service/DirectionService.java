@@ -2,6 +2,7 @@ package com.luckydog.servicemap.service;
 
 import com.luckydog.internalcommon.dto.ResponseResult;
 import com.luckydog.internalcommon.response.DirectionResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DirectionService {
-
     public ResponseResult driving(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
 
         DirectionResponse directionResponse = new DirectionResponse();
